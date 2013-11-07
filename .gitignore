@@ -1,0 +1,73 @@
+#  Build
+# --------
+bin/
+build/
+dist/
+distribution/
+lib/
+out/
+target/
+MANIFEST.MF
+dependency-reduced-pom.xml
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+#  Datenbank
+# -----------
+*.db
+*.sqlite
+*.h2
+
+#  Komprimierte Verzeichnisse
+# ----------------------------
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+#  Git
+# -----
+.git/
+
+#  Runtime
+# ---------
+/cache/
+/config/
+/data/
+/natives/
+/libraries/
+/log/
+/logs/
+/update/
+/updates/
+/temp/
+*.log
+
+#  System
+# --------
+.DS_Store/
+ehthumbs.db
+Thumbs.db
+
+#  Project
+# ---------
+.externalToolBuilders/
+.idea/
+nbproject/
+.project
+.classpath
+.settings
+atlassian-ide-plugin.xml
+build.xml
+nb-configuration.xml
+*.iml
+*.ipr
+*.iws

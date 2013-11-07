@@ -40,6 +40,12 @@
 	</dependencies>
 	
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources/META-INF/m2e/</directory>
+				<targetPath>META-INF/m2e/</targetPath>
+			</resource>
+		</resources>
 		<pluginManagement>
 			<plugins>
 				<plugin>

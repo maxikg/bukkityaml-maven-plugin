@@ -63,3 +63,38 @@ name, url and so on).
 	[...]
 </build>
 ```
+
+## Maven Repository
+
+If you want to use this Maven plugin you can clone the repo and build it or you
+can use my repository:
+
+```xml
+<project>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>maxikg-repo</id>
+			<url>http://repo.maxikg.de/content/groups/public/</url>
+		</pluginRepository>
+		
+		[...]
+	</pluginRepositories>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>de.maxikg</groupId>
+				<artifactId>bukkityaml-maven-plugin</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<!-- Dont forget to configure the plugin -->
+			</plugin>
+			
+			[...]
+		</plugins>
+		
+		[...]
+	</build>
+	
+	[...]
+</project>
+```

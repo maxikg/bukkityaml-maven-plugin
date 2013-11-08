@@ -9,6 +9,17 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
+	<distributionManagement>
+		<repository>
+			<id>maxikg-repo</id>
+			<url>http://repo.maxikg.de/content/repositories/release/</url>
+		</repository>
+		<snapshotRepository>
+			<id>maxikg-repo</id>
+			<url>http://repo.maxikg.de/content/repositories/snapshot/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>

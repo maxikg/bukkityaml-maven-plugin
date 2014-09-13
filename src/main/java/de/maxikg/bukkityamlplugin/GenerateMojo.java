@@ -2,8 +2,13 @@ package de.maxikg.bukkityamlplugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
 import java.util.Map.Entry;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+import de.maxikg.bukkityamlplugin.util.MapConfiguration;
 import org.apache.maven.model.Developer;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -13,15 +18,15 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.google.common.collect.ImmutableSet;
+import org.yaml.snakeyaml.Yaml;
 
 @Mojo(name="generate", requiresProject=true, defaultPhase=LifecyclePhase.GENERATE_RESOURCES)
 public class GenerateMojo extends AbstractMojo {
-	
+
+    private static final Yaml YAML = new Yaml();
+
 	@Component
 	private MavenProject project;
 	
@@ -36,36 +41,36 @@ public class GenerateMojo extends AbstractMojo {
 	
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		normalizeConfig();
-		
-		YamlConfiguration config = new YamlConfiguration();
-		
-		config.set("name", pluginYaml.getName());
-		config.set("version", pluginYaml.getVersion());
+
+        MapConfiguration config = new MapConfiguration();
+
+        config.setRequired("name", pluginYaml.getName(), "name must be set.");
+        config.setRequired("version", pluginYaml.getVersion(), "version must be set.");
 		config.set("description", pluginYaml.getDescription());
 		config.set("load", pluginYaml.getLoad().name());
 		config.set("author", pluginYaml.getAuthor());
-		
-		String[] authors = pluginYaml.getAuthors().toArray(new String[0]);
-		if (authors.length > 0)
-			config.set("authors", authors);
+
+		ImmutableList<String> authors = pluginYaml.getAuthors();
+		if (!authors.isEmpty())
+			config.set("authors", authors.toArray(new String[authors.size()]));
 		
 		config.set("website", pluginYaml.getWebsite());
-		config.set("main", pluginYaml.getMain());
+		config.setRequired("main", pluginYaml.getMain(), "main must be set.");
 		config.set("database", pluginYaml.getDatabase());
-		
-		String[] depend = pluginYaml.getDepend().toArray(new String[0]);
-		if (depend.length > 0)
-			config.set("depend", depend);
+
+        ImmutableList<String> depend = pluginYaml.getDepend();
+		if (!depend.isEmpty())
+			config.set("depend", depend.toArray(new String[depend.size()]));
 		
 		config.set("prefix", pluginYaml.getPrefix());
-		
-		String[] softDepend = pluginYaml.getSoftDepend().toArray(new String[0]);
-		if (softDepend.length > 0)
-			config.set("softdepend", softDepend);
-		
-		String[] loadBefore = pluginYaml.getLoadBefore().toArray(new String[0]);
-		if (loadBefore.length > 0)
-			config.set("loadbefore", loadBefore);
+
+        ImmutableList<String> softDepend = pluginYaml.getSoftDepend();
+		if (!softDepend.isEmpty())
+			config.set("softdepend", softDepend.toArray(new String[softDepend.size()]));
+
+        ImmutableList<String> loadBefore = pluginYaml.getLoadBefore();
+		if (!loadBefore.isEmpty())
+			config.set("loadbefore", loadBefore.toArray(new String[loadBefore.size()]));
 		
 		for (CommandModel cmd : pluginYaml.getCommands()) {
 			if (cmd.getName() == null)
@@ -80,45 +85,56 @@ public class GenerateMojo extends AbstractMojo {
 			
 			config.set("permissions." + perm.getNode(), serializePermission(perm));
 		}
-		
+
+        String configContent = YAML.dump(config.getData());
 		File target = new File(outputDirectory, filename);
+        PrintWriter pw;
 		try {
-			config.save(target);
+            outputDirectory.mkdirs();
+
+            if (!target.exists()) {
+                if (!target.createNewFile())
+                    throw new MojoFailureException("File was not created.");
+            } else if (target.isDirectory()) {
+                throw new MojoFailureException("Target is an directory.");
+            }
+
+            pw = new PrintWriter(target);
+            pw.write(configContent);
+            pw.flush();
+            pw.close();
 		} catch (IOException e) {
 			throw new MojoFailureException("Cannot save plugin.yml", e);
 		}
 		getLog().info("plugin.yml generated.");
 	}
 	
-	private ConfigurationSection serializePermission(PermissionModel model) {
-		ConfigurationSection config = new MemoryConfiguration();
+	private Map<String, Object> serializePermission(PermissionModel model) {
+		Map<String, Object> config = Maps.newHashMap();
 		
-		config.set("description", model.getDescription());
-		config.set("default", model.getDefault().name());
+		config.put("description", model.getDescription());
+		config.put("default", model.getDefault().name());
 		
 		ImmutableSet<Entry<String, Boolean>> children = model.getChildren().entrySet();
-		if (children.size() > 0) {
-			ConfigurationSection childs = new MemoryConfiguration();
-			for (Entry<String, Boolean> child : children)
-				config.set(child.getKey(), child.getValue());
-			config.set("children", childs);
+		if (!children.isEmpty()) {
+			config.put("children", children);
 		}
 		
 		return config;
 	}
 	
-	private ConfigurationSection serializeCommand(CommandModel model) {
-		ConfigurationSection config = new MemoryConfiguration();
+	private Map<String, Object> serializeCommand(CommandModel model) {
+        Map<String, Object> config = Maps.newHashMap();
 		
-		config.set("description", model.getDescription());
+		config.put("description", model.getDescription());
 		
-		String[] aliases = model.getAliases().toArray(new String[0]);
-		if (aliases.length > 0)
-			config.set("aliases", aliases);
+		ImmutableList<String> aliases = model.getAliases();
+		if (!aliases.isEmpty())
+			config.put("aliases", aliases.toArray(new String[aliases.size()]));
 		
-		config.set("permission", model.getPermission());
-		config.set("permission-message", model.getPermissionMessage());
-		config.set("usage", model.getUsage());
+		config.put("permission", model.getPermission());
+		config.put("permission-message", model.getPermissionMessage());
+		config.put("usage", model.getUsage());
 		
 		return config;
 	}

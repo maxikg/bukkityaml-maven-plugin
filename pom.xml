@@ -21,10 +21,10 @@
 	</distributionManagement>
 	
 	<repositories>
-		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public/</url>
-		</repository>
+        <repository>
+            <id>sonatype-opensource</id>
+            <url>http://oss.sonatype.org/content/groups/public/</url>
+        </repository>
 	</repositories>
 	
 	<dependencies>

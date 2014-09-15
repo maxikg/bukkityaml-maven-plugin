@@ -1,87 +1,88 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.maxikg</groupId>
-	<artifactId>bukkityaml-maven-plugin</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
-	<packaging>maven-plugin</packaging>
-	
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	
-	<distributionManagement>
-		<repository>
-			<id>maxikg-repo</id>
-			<url>http://repo.maxikg.de/content/repositories/release/</url>
-		</repository>
-		<snapshotRepository>
-			<id>maxikg-repo</id>
-			<url>http://repo.maxikg.de/content/repositories/snapshot/</url>
-		</snapshotRepository>
-	</distributionManagement>
-	
-	<repositories>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.maxikg</groupId>
+    <artifactId>bukkityaml-maven-plugin</artifactId>
+    <version>0.0.2-SNAPSHOT</version>
+    <packaging>maven-plugin</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>maxikg-repo</id>
+            <url>http://repo.maxikg.de/content/repositories/release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maxikg-repo</id>
+            <url>http://repo.maxikg.de/content/repositories/snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <repositories>
         <repository>
             <id>sonatype-opensource</id>
             <url>http://oss.sonatype.org/content/groups/public/</url>
         </repository>
-	</repositories>
-	
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-plugin-api</artifactId>
-			<version>3.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-core</artifactId>
-			<version>3.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.plugin-tools</groupId>
-			<artifactId>maven-plugin-annotations</artifactId>
-			<version>3.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-			<version>1.14</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>16.0.1</version>
-		</dependency>
-	</dependencies>
-	
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources/META-INF/m2e/</directory>
-				<targetPath>META-INF/m2e/</targetPath>
-			</resource>
-		</resources>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-plugin-plugin</artifactId>
-					<version>3.2</version>
-					<configuration>
-						<skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
-					</configuration>
-					<executions>
-						<execution>
-							<id>mojo-descriptor</id>
-							<phase>process-classes</phase>
-							<goals>
-								<goal>descriptor</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.14</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>16.0.1</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/META-INF/m2e/</directory>
+                <targetPath>META-INF/m2e/</targetPath>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>3.2</version>
+                    <configuration>
+                        <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>mojo-descriptor</id>
+                            <phase>process-classes</phase>
+                            <goals>
+                                <goal>descriptor</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
